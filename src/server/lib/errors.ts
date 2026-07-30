@@ -1,0 +1,25 @@
+import { isErrorCode, type ErrorCode } from "@/shared/error-codes";
+
+export class AppError extends Error {
+  constructor(
+    public readonly code: ErrorCode,
+    message?: string,
+    public readonly details?: Record<string, string>,
+  ) {
+    super(message ?? code);
+    this.name = "AppError";
+  }
+}
+
+export function asAppError(error: unknown): AppError | null {
+  if (error instanceof AppError) return error;
+  if (error instanceof Error && isErrorCode(error.message)) {
+    return new AppError(error.message, error.message);
+  }
+  return null;
+}
+
+export function toClientError(error: unknown): Error {
+  const appError = asAppError(error);
+  return new Error(appError?.code ?? "INTERNAL_ERROR");
+}

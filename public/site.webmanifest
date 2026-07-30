@@ -1,0 +1,14 @@
+{
+  "name": "Calitoy Content",
+  "short_name": "Calitoy",
+  "icons": [
+    {
+      "src": "/calitoy-favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#8d8d8d",
+  "background_color": "#8d8d8d",
+  "display": "standalone"
+}

@@ -1,0 +1,169 @@
+import { RankTrackingRepository } from "@/server/features/rank-tracking/repositories/RankTrackingRepository";
+import { toSqliteTimestamp } from "@/server/features/rank-tracking/rankTrackingTimestamps";
+import { AppError } from "@/server/lib/errors";
+import type { ComparePeriod } from "@/types/schemas/rank-tracking";
+import type {
+  RankTrackingDeviceResult,
+  RankTrackingRow,
+} from "@/types/schemas/rank-tracking";
+
+type SnapshotRow = Awaited<
+  ReturnType<typeof RankTrackingRepository.getLatestSnapshotsForKeywords>
+>[0];
+
+const PERIOD_DAYS: Record<ComparePeriod, number> = {
+  "1d": 1,
+  "7d": 7,
+  "30d": 30,
+  "90d": 90,
+};
+
+export async function getLatestResults(
+  configId: string,
+  projectId: string,
+  comparePeriod: ComparePeriod = "7d",
+): Promise<{
+  rows: RankTrackingRow[];
+  run: { id: string; lastCheckedAt: string } | null;
+}> {
+  const days = PERIOD_DAYS[comparePeriod];
+  const targetDate = toSqliteTimestamp(
+    new Date(Date.now() - days * 24 * 60 * 60 * 1000),
+  );
+
+  // All four reads key off the inputs alone, so run them in one parallel round
+  // trip instead of four sequential ones — this endpoint is hot and the DB may
+  // be a continent away. The project-scoped config lookup doubles as the
+  // authorization gate for the configId-keyed reads racing alongside it: when
+  // config is null, throw without returning anything from the other reads.
+  const [config, activeKeywords, currentSnapshots, comparisonSnapshots] =
+    await Promise.all([
+      RankTrackingRepository.getConfigById({ configId, projectId }),
+      RankTrackingRepository.getKeywordsForConfig(configId),
+      // Latest snapshot per keyword per device (across all completed runs)
+      RankTrackingRepository.getLatestSnapshotsForKeywords(configId),
+      // Comparison snapshots from before the target date
+      RankTrackingRepository.getSnapshotsBeforeDate(configId, targetDate),
+    ]);
+  if (!config) {
+    throw new AppError("INTERNAL_ERROR", "Rank tracking config not found");
+  }
+
+  const previousPositions = new Map<string, number | null>();
+  for (const snap of comparisonSnapshots) {
+    previousPositions.set(
+      `${snap.trackingKeywordId}:${snap.device}`,
+      snap.position,
+    );
+  }
+
+  // Fallback: for keyword+device combos with no comparison snapshot before
+  // the target date, use the earliest available snapshot as a baseline.
+  const missingKeywordIds: string[] = [];
+  for (const snap of currentSnapshots) {
+    const key = `${snap.trackingKeywordId}:${snap.device}`;
+    if (!previousPositions.has(key)) {
+      missingKeywordIds.push(snap.trackingKeywordId);
+    }
+  }
+
+  if (missingKeywordIds.length > 0) {
+    const uniqueMissingIds = [...new Set(missingKeywordIds)];
+    const earliestSnapshots =
+      await RankTrackingRepository.getEarliestSnapshotsForKeywords(
+        configId,
+        uniqueMissingIds,
+      );
+    for (const snap of earliestSnapshots) {
+      const key = `${snap.trackingKeywordId}:${snap.device}`;
+      if (!previousPositions.has(key)) {
+        previousPositions.set(key, snap.position);
+      }
+    }
+  }
+
+  // Build result rows
+  const rows = new Map<string, RankTrackingRow>(
+    activeKeywords.map((keyword) => [
+      keyword.id,
+      {
+        trackingKeywordId: keyword.id,
+        keyword: keyword.keyword,
+        searchVolume: keyword.searchVolume,
+        keywordDifficulty: keyword.keywordDifficulty,
+        cpc: keyword.cpc,
+        desktop: createEmptyDeviceResult(
+          previousPositions.get(`${keyword.id}:desktop`) ?? null,
+        ),
+        mobile: createEmptyDeviceResult(
+          previousPositions.get(`${keyword.id}:mobile`) ?? null,
+        ),
+      },
+    ]),
+  );
+
+  // Determine the most recent snapshot time for the run info
+  let latestRunId: string | null = null;
+  let latestStartedAt: string | null = null;
+
+  for (const snapshot of currentSnapshots) {
+    const row = rows.get(snapshot.trackingKeywordId);
+    if (!row) continue;
+    row[snapshot.device] = toDeviceResult(
+      snapshot,
+      previousPositions.get(
+        `${snapshot.trackingKeywordId}:${snapshot.device}`,
+      ) ?? null,
+    );
+
+    // Track the most recent run for the header display
+    if (!latestStartedAt || snapshot.checkedAt > latestStartedAt) {
+      latestRunId = snapshot.runId;
+      latestStartedAt = snapshot.checkedAt;
+    }
+  }
+
+  return {
+    rows: [...rows.values()],
+    run:
+      latestRunId && latestStartedAt
+        ? { id: latestRunId, lastCheckedAt: latestStartedAt }
+        : null,
+  };
+}
+
+function parseSerpFeatures(raw: string | null): string[] {
+  if (!raw) return [];
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (Array.isArray(parsed)) {
+      return parsed.filter((item): item is string => typeof item === "string");
+    }
+  } catch {
+    // ignore
+  }
+  return [];
+}
+
+function createEmptyDeviceResult(
+  previousPosition: number | null,
+): RankTrackingDeviceResult {
+  return {
+    position: null,
+    previousPosition,
+    rankingUrl: null,
+    serpFeatures: [],
+  };
+}
+
+function toDeviceResult(
+  snapshot: SnapshotRow,
+  previousPosition: number | null,
+): RankTrackingDeviceResult {
+  return {
+    position: snapshot.position,
+    previousPosition,
+    rankingUrl: snapshot.url,
+    serpFeatures: parseSerpFeatures(snapshot.serpFeatures),
+  };
+}

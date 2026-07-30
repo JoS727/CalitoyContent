@@ -1,0 +1,81 @@
+import { createServerFn } from "@tanstack/react-start";
+import { ProjectService } from "@/server/features/projects/services/ProjectService";
+import {
+  requireAuthenticatedContext,
+  requireProjectContext,
+} from "@/serverFunctions/middleware";
+import {
+  archiveProjectSchema,
+  createProjectSchema,
+  restoreProjectSchema,
+  setProjectDomainSchema,
+  setProjectMarketSchema,
+  updateProjectSchema,
+} from "@/types/schemas/projects";
+import { z } from "zod";
+
+const projectScopedSchema = z.object({ projectId: z.string().min(1) });
+
+export const getProjects = createServerFn({ method: "POST" })
+  .middleware(requireAuthenticatedContext)
+  .handler(async ({ context }) =>
+    ProjectService.listProjectsEnsuringOne(context.organizationId),
+  );
+
+export const createProject = createServerFn({ method: "POST" })
+  .middleware(requireAuthenticatedContext)
+  .validator(createProjectSchema)
+  .handler(async ({ data, context }) =>
+    ProjectService.createProject(context.organizationId, data),
+  );
+
+export const updateProject = createServerFn({ method: "POST" })
+  .middleware(requireProjectContext)
+  .validator(updateProjectSchema)
+  .handler(async ({ data, context }) =>
+    ProjectService.updateProject(context.organizationId, data),
+  );
+
+export const setProjectDomain = createServerFn({ method: "POST" })
+  .middleware(requireProjectContext)
+  .validator(setProjectDomainSchema)
+  .handler(async ({ data, context }) =>
+    ProjectService.setProjectDomain(context.organizationId, data),
+  );
+
+export const setProjectMarket = createServerFn({ method: "POST" })
+  .middleware(requireProjectContext)
+  .validator(setProjectMarketSchema)
+  .handler(async ({ data, context }) =>
+    ProjectService.setProjectMarket(context.organizationId, data),
+  );
+
+export const archiveProject = createServerFn({ method: "POST" })
+  .middleware(requireProjectContext)
+  .validator(archiveProjectSchema)
+  .handler(async ({ data, context }) =>
+    ProjectService.archiveProject(context.organizationId, data),
+  );
+
+export const getArchivedProjects = createServerFn({ method: "POST" })
+  .middleware(requireAuthenticatedContext)
+  .handler(async ({ context }) =>
+    ProjectService.listArchivedProjects(context.organizationId),
+  );
+
+export const restoreProject = createServerFn({ method: "POST" })
+  .middleware(requireAuthenticatedContext)
+  .validator(restoreProjectSchema)
+  .handler(async ({ data, context }) =>
+    ProjectService.restoreProject(context.organizationId, data),
+  );
+
+export const getProjectAccess = createServerFn({ method: "POST" })
+  .middleware(requireAuthenticatedContext)
+  .validator(projectScopedSchema)
+  .handler(async ({ data, context }) => {
+    return ProjectService.getProjectForOrganization(
+      context.organizationId,
+      data.projectId,
+    );
+  });
