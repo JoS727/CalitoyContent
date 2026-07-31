@@ -13,6 +13,10 @@ It is a full-stack application—not the static Calitoy Content sales page. The 
 - AI visibility, MCP tools, and optional OpenRouter-assisted analysis
 - Team authentication and organization-aware projects
 
+## Managing the Calitoy portfolio
+
+Use one project per independently ranked property so keywords, audits, Search Console data, rankings, backlinks, and reporting remain isolated while still living in one Calitoy Content workspace. The initial roster, launch sequence, operating rhythm, and editorial safeguards are documented in [`docs/CALITOY_PORTFOLIO_SEO.md`](docs/CALITOY_PORTFOLIO_SEO.md).
+
 ## Provenance and license
 
 This product started from the MIT-licensed [OpenSEO](https://github.com/JoS727/open-seo) codebase, then was incorporated into this owned Calitoy Content repository. The original `LICENSE` is preserved, as required by the MIT license. Runtime identifiers such as existing migration history and Worker object names are intentionally retained until the deployment migration is planned; this avoids breaking existing data or Cloudflare bindings during the code move.
