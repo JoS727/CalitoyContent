@@ -11,14 +11,17 @@ The application is based on the MIT-licensed OpenSEO project (copyright © 2026 
 This is a full-stack Cloudflare application, not a static brochure site. Deployment secrets belong only in the deployment provider's encrypted secret store; do not commit them.
 
 Required for SEO data:
+
 - `DATAFORSEO_API_KEY` — Base64-encoded `login:password` DataForSEO credential.
 
 Required for secure Cloudflare Access deployment:
+
 - `AUTH_MODE=cloudflare_access`
 - `TEAM_DOMAIN`
 - `POLICY_AUD`
 
 Optional integrations:
+
 - `OPENROUTER_API_KEY` for the in-app AI/SEO agent.
 - Google OAuth credentials and `BETTER_AUTH_SECRET` for Search Console integration.
 

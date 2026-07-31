@@ -43,14 +43,17 @@ pnpm run build
 This app is designed for Cloudflare. Configure all credentials as encrypted deployment secrets—never commit them.
 
 Required for SEO data:
+
 - `DATAFORSEO_API_KEY` — Base64-encoded DataForSEO `login:password` credential.
 
 Recommended for protected deployments:
+
 - `AUTH_MODE=cloudflare_access`
 - `TEAM_DOMAIN`
 - `POLICY_AUD`
 
 Optional integrations:
+
 - `OPENROUTER_API_KEY` for the AI SEO agent
 - Google OAuth credentials plus `BETTER_AUTH_SECRET` for Search Console
 

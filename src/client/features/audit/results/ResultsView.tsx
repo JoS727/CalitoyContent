@@ -53,8 +53,8 @@ export function ResultsView({
             <span className="text-base-content/70">
               The site's bot protection challenged our crawler, so those pages
               couldn't be audited. If this is your site, allowlist the{" "}
-              <code className="font-mono">Calitoy Content-Audit</code> user agent in
-              your WAF or bot-protection settings and re-run the audit.
+              <code className="font-mono">Calitoy Content-Audit</code> user
+              agent in your WAF or bot-protection settings and re-run the audit.
             </span>
           </p>
         </div>

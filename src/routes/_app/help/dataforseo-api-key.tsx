@@ -16,8 +16,8 @@ function DataforseoApiKeyHelpPage() {
               Set up your DataForSEO API key
             </h1>
             <p className="text-sm text-base-content/70">
-              Calitoy Content needs the <code>DATAFORSEO_API_KEY</code> secret before
-              keyword, domain, and SEO data workflows can run.
+              Calitoy Content needs the <code>DATAFORSEO_API_KEY</code> secret
+              before keyword, domain, and SEO data workflows can run.
             </p>
           </div>
         </div>

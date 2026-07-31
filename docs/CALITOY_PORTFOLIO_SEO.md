@@ -6,22 +6,22 @@ One Calitoy Content deployment can run SEO operations for every Calitoy property
 
 Create one project per independently ranked domain or audience. Do not merge unrelated domains into a single project.
 
-| Project | Primary domain | Initial market | Operating focus |
-| --- | --- | --- | --- |
-| Tarosyn Marketing | `tarosyn.com` | United States / English | Tarot, astrology, spiritual guidance, branded discovery |
-| Tarosyn App | `tarosyn.app` | United States / English | Product-led search, app landing pages, readings and features |
-| XCalitoy | `xcalitoy.com` | United States / English | Portfolio navigation, Joseph Calitoy identity, culture and projects |
-| Calitoy Content | `content.xcalitoy.com` | United States / English | AI-powered SEO consulting and qualified client leads |
-| Calitoy Custom | `custom.xcalitoy.com` | United States / English | Custom skateboards, design work, local and product intent |
-| Calitoy Cues | Confirm production domain | United States / English | Music discovery, creative work, branded queries |
-| CalitoyCorp | Confirm production domain | United States / English | Holding-company credibility and portfolio discovery |
-| Kurced | `kurced.com` | United States / English | Music, lyrics, visual identity, releases and merchandise |
-| Endof8 | `endof8.com` | San Diego / English | Ocean Beach news, culture, events and merchandise |
-| Jeremy Dean Music | `jeremydeanmusic.com` | United States / English | Artist discovery, live shows, booking and music |
-| Joseph Calitoy | `josephcalitoy.com` | United States / English | Artist/founder knowledge graph, music and portfolio identity |
-| Wicked Youth Goods | Confirm production domain | United States / English | Skin products, product/category discovery and branded search |
-| SpaX | Confirm production domain | United States / English | Product/service intent after market and domain confirmation |
-| Field Trip | Confirm production domain | Confirm before tracking | Brand/product intent after market and domain confirmation |
+| Project            | Primary domain            | Initial market          | Operating focus                                                     |
+| ------------------ | ------------------------- | ----------------------- | ------------------------------------------------------------------- |
+| Tarosyn Marketing  | `tarosyn.com`             | United States / English | Tarot, astrology, spiritual guidance, branded discovery             |
+| Tarosyn App        | `tarosyn.app`             | United States / English | Product-led search, app landing pages, readings and features        |
+| XCalitoy           | `xcalitoy.com`            | United States / English | Portfolio navigation, Joseph Calitoy identity, culture and projects |
+| Calitoy Content    | `content.xcalitoy.com`    | United States / English | AI-powered SEO consulting and qualified client leads                |
+| Calitoy Custom     | `custom.xcalitoy.com`     | United States / English | Custom skateboards, design work, local and product intent           |
+| Calitoy Cues       | Confirm production domain | United States / English | Music discovery, creative work, branded queries                     |
+| CalitoyCorp        | Confirm production domain | United States / English | Holding-company credibility and portfolio discovery                 |
+| Kurced             | `kurced.com`              | United States / English | Music, lyrics, visual identity, releases and merchandise            |
+| Endof8             | `endof8.com`              | San Diego / English     | Ocean Beach news, culture, events and merchandise                   |
+| Jeremy Dean Music  | `jeremydeanmusic.com`     | United States / English | Artist discovery, live shows, booking and music                     |
+| Joseph Calitoy     | `josephcalitoy.com`       | United States / English | Artist/founder knowledge graph, music and portfolio identity        |
+| Wicked Youth Goods | Confirm production domain | United States / English | Skin products, product/category discovery and branded search        |
+| SpaX               | Confirm production domain | United States / English | Product/service intent after market and domain confirmation         |
+| Field Trip         | Confirm production domain | Confirm before tracking | Brand/product intent after market and domain confirmation           |
 
 A subdomain should be its own project when it has a separate audience, conversion, Search Console property, or content strategy. That is why Calitoy Content and Calitoy Custom should not be hidden inside the general XCalitoy project.
 

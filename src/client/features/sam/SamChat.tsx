@@ -116,8 +116,8 @@ export function SamChat({
       <div className="space-y-1">
         <p className="text-lg font-medium">What should we work on?</p>
         <p className="max-w-sm text-sm text-base-content/60">
-          SAM is your in-app SEO agent with access to every Calitoy Content research
-          tool. Start a chat to get going.
+          SAM is your in-app SEO agent with access to every Calitoy Content
+          research tool. Start a chat to get going.
         </p>
       </div>
       <button

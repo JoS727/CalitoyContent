@@ -45,8 +45,8 @@ export function SearchConsoleOnboardingStep() {
         {project ? <GscConnect projectId={project.id} /> : <Checking />}
 
         <p className="hidden sm:block text-xs leading-relaxed text-base-content/55">
-          For now, Search Console data flows through the Calitoy Content MCP. We're
-          building it into the Calitoy Content app soon too.
+          For now, Search Console data flows through the Calitoy Content MCP.
+          We're building it into the Calitoy Content app soon too.
         </p>
       </div>
 

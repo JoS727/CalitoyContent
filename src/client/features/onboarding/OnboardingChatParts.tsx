@@ -67,8 +67,8 @@ export function WelcomeMessage({
         <div className="space-y-3 text-base-content/80">
           <p>Hey, I’m Sam — welcome to Calitoy Content.</p>
           <p>
-            To get full access to Calitoy Content, you need to upgrade to the paid plan.
-            But, I’m here if you have any questions.
+            To get full access to Calitoy Content, you need to upgrade to the
+            paid plan. But, I’m here if you have any questions.
           </p>
           <p>
             You can also{" "}
@@ -146,7 +146,9 @@ export function UpgradeSidebar({
           <Globe className="size-4" />
         </span>
         <div className="min-w-0">
-          <p className="font-medium text-base-content/80">Previewing Calitoy Content</p>
+          <p className="font-medium text-base-content/80">
+            Previewing Calitoy Content
+          </p>
           <p className="truncate" title={domain}>
             {domain}
           </p>
@@ -231,7 +233,8 @@ export function ChatGate({
           That’s all {FREE_ONBOARDING_QUESTION_LIMIT} free questions
         </p>
         <p className="mx-auto mt-1 max-w-md text-xs text-base-content/70">
-          Upgrade to keep working with Sam and unlock the full Calitoy Content app.
+          Upgrade to keep working with Sam and unlock the full Calitoy Content
+          app.
         </p>
         <button
           type="button"

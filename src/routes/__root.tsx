@@ -40,7 +40,7 @@ export const Route = createRootRoute({
   head: () => ({
     meta: [
       {
-        title: "Calitoy Content", 
+        title: "Calitoy Content",
       },
       {
         charSet: "utf-8",

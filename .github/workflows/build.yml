@@ -27,7 +27,9 @@ jobs:
             if [[ -f pnpm-lock.yaml ]]; then
               corepack enable
               pnpm install --frozen-lockfile
-              pnpm run build --if-present
+              if pnpm pkg get scripts.build | grep -qv '^{}$'; then
+                pnpm run build
+              fi
             elif [[ -f package-lock.json ]]; then
               npm ci
               npm run build --if-present

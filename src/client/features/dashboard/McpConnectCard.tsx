@@ -100,8 +100,8 @@ export function McpConnectCard({
           <>
             <div className="space-y-2 text-sm text-base-content/70">
               <p>
-                Calitoy Content is designed to give your AI agent the data it needs to
-                build a great SEO strategy and help you execute it.
+                Calitoy Content is designed to give your AI agent the data it
+                needs to build a great SEO strategy and help you execute it.
               </p>
               <p>
                 This way you aren&rsquo;t limited on &ldquo;AI credits&rdquo;.

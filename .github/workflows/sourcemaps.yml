@@ -27,5 +27,16 @@ jobs:
           cache: pnpm
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      - name: Check PostHog configuration
+        id: posthog
+        shell: bash
+        run: |
+          if [[ -z "$POSTHOG_CLI_HOST" || -z "$POSTHOG_CLI_ENV_ID" || -z "$POSTHOG_CLI_TOKEN" ]]; then
+            echo "::warning::Skipping sourcemap upload because this repository is not fully connected to PostHog."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          fi
       - name: Build and upload sourcemaps
+        if: steps.posthog.outputs.enabled == 'true'
         run: pnpm run sourcemaps:upload

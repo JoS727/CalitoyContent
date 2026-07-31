@@ -50,8 +50,9 @@ function AiPage() {
       <div className="mx-auto max-w-3xl">
         <h1 className="text-2xl font-semibold">AI & MCP</h1>
         <p className="mt-2 text-sm text-base-content/70 leading-relaxed">
-          Connect your AI agent to Calitoy Content. Run keyword research, SERP analysis,
-          domain lookups, and backlink reviews from your editor or chat.
+          Connect your AI agent to Calitoy Content. Run keyword research, SERP
+          analysis, domain lookups, and backlink reviews from your editor or
+          chat.
         </p>
 
         <section className="mt-8">
@@ -71,9 +72,9 @@ function AiPage() {
             </code>
           </div>
           <p className="mt-2.5 text-xs text-base-content/55 leading-relaxed">
-            Paste this into any MCP client. This URL points at the Calitoy Content
-            instance you are using now, whether hosted, self-hosted, or local.
-            Sign in with Calitoy Content when prompted.
+            Paste this into any MCP client. This URL points at the Calitoy
+            Content instance you are using now, whether hosted, self-hosted, or
+            local. Sign in with Calitoy Content when prompted.
           </p>
         </section>
 
@@ -196,8 +197,8 @@ function AiPage() {
           <h2 className="text-base font-semibold">Calitoy Content Skills</h2>
           <p className="mt-1.5 text-sm text-base-content/70 leading-relaxed">
             Skills give Codex and Claude Code reusable SEO workflows that can
-            call your Calitoy Content MCP tools when live SERP, keyword, backlink, or
-            domain data is needed.
+            call your Calitoy Content MCP tools when live SERP, keyword,
+            backlink, or domain data is needed.
           </p>
           <div className="mt-4 divide-y divide-base-300 overflow-hidden rounded-lg border border-base-300 bg-base-200">
             <Collapsible

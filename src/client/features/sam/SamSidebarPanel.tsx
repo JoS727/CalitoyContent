@@ -37,8 +37,8 @@ function BetaNotice() {
         </button>
       </div>
       <p className="mt-1.5 text-xs text-base-content/70">
-        For more powerful AI workflows, use the Calitoy Content MCP with your own agent
-        like Claude Code or Hermes.
+        For more powerful AI workflows, use the Calitoy Content MCP with your
+        own agent like Claude Code or Hermes.
       </p>
       <Link to="/ai" className="link link-primary mt-1.5 inline-block text-xs">
         Set up the MCP →
