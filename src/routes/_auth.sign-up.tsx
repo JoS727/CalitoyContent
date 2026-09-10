@@ -51,9 +51,12 @@ export const Route = createFileRoute("/_auth/sign-up")({
 function SignUpPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
-  const { redirectTo, isHostedMode } = useAuthPageState(search.redirect);
+  const { redirectTo, isHostedMode, googleEnabled } = useAuthPageState(
+    search.redirect,
+  );
   const postSignupRedirect = redirectTo === "/" ? "/onboarding" : redirectTo;
-  const [showEmailForm, setShowEmailForm] = useState(false);
+  // When Google isn't configured, go straight to the email/password form.
+  const [showEmailForm, setShowEmailForm] = useState(!googleEnabled);
   const google = useGoogleSignUp({ redirectTo, postSignupRedirect });
 
   // Turnstile is active only in hosted mode with a configured site key.
@@ -153,10 +156,10 @@ function SignUpPage() {
       title="Create your account"
       footer={
         isHostedMode ? (
-          showEmailForm ? (
+          showEmailForm && googleEnabled ? (
             <button
               type="button"
-              className="text-sm text-base-content underline underline-offset-2 hover:text-base-content/80 transition-colors"
+              className="text-sm text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
               onClick={() => {
                 setShowEmailForm(false);
                 google.clearError();
@@ -172,7 +175,7 @@ function SignUpPage() {
                   href="https://openseo.so/terms-and-conditions"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-base-content underline underline-offset-2 hover:text-base-content/80 transition-colors"
+                  className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
                 >
                   Terms
                 </a>{" "}
@@ -181,7 +184,7 @@ function SignUpPage() {
                   href="https://openseo.so/privacy"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-base-content underline underline-offset-2 hover:text-base-content/80 transition-colors"
+                  className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
                 >
                   Privacy Policy
                 </a>
@@ -193,7 +196,7 @@ function SignUpPage() {
                 <Link
                   to="/sign-in"
                   search={getSignInSearch(redirectTo)}
-                  className="text-base-content underline underline-offset-2 hover:text-base-content/80 transition-colors"
+                  className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
                 >
                   Sign in
                 </Link>
@@ -349,7 +352,7 @@ function SignUpPage() {
                     <p className="text-sm text-error">{errorMessage}</p>
                   ) : null}
                   <button
-                    className="btn btn-soft w-full"
+                    className="btn btn-primary w-full"
                     disabled={
                       !isHostedMode ||
                       isSubmitting ||

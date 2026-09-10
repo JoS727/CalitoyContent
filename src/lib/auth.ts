@@ -114,13 +114,22 @@ function createAuth() {
           // throwaway-inbox domains before the user row is created. Self-hosted
           // has no shared credit pool to protect, so it's left untouched.
           before: async (user) => {
-            if (
-              isHostedAuthMode(env.AUTH_MODE) &&
-              isDisposableEmailDomain(user.email)
-            ) {
-              throw new APIError("BAD_REQUEST", {
-                message: "Please sign up with a non-disposable email address.",
-              });
+            if (isHostedAuthMode(env.AUTH_MODE)) {
+              // Invite-only paywall: only allowlisted emails may register. This
+              // is the primary gate that keeps the deployment private to the
+              // operator's own account(s).
+              if (!isSignupAllowed(user.email)) {
+                throw new APIError("FORBIDDEN", {
+                  message:
+                    "Registration is invite-only. Contact the site owner for access.",
+                });
+              }
+              if (isDisposableEmailDomain(user.email)) {
+                throw new APIError("BAD_REQUEST", {
+                  message:
+                    "Please sign up with a non-disposable email address.",
+                });
+              }
             }
             return { data: user };
           },
@@ -218,31 +227,50 @@ function getHostedSecret() {
   return secret;
 }
 
+// Invite-only signup allowlist. Defaults to the operator's own address so the
+// hosted deployment is private out of the box; override with a comma-separated
+// SIGNUP_ALLOWED_EMAILS to grant additional accounts.
+const DEFAULT_SIGNUP_ALLOWLIST = ["joseph@xcalitoy.com"];
+
+function getSignupAllowlist(): string[] {
+  const raw = Reflect.get(env, "SIGNUP_ALLOWED_EMAILS");
+  const configured =
+    typeof raw === "string" && raw.trim() !== ""
+      ? raw
+          .split(",")
+          .map((email) => email.trim().toLowerCase())
+          .filter(Boolean)
+      : [];
+
+  return configured.length > 0 ? configured : DEFAULT_SIGNUP_ALLOWLIST;
+}
+
+function isSignupAllowed(email: string): boolean {
+  return getSignupAllowlist().includes(email.trim().toLowerCase());
+}
+
 function getSocialProviders() {
-  // Google social login is hosted-only. Self-hosted builds the auth instance
-  // solely for Search Console token ops, which use the genericOAuth provider
-  // (createBaseAuthConfig) with its own creds — so it must NOT require the
-  // social-login config here, otherwise getAuth() construction would be coupled
-  // to GSC creds rather than just BETTER_AUTH_SECRET.
+  // Google social login is hosted-only AND optional: when no Google OAuth
+  // credentials are configured we simply omit it so email/password remains the
+  // sole hosted sign-in method. Self-hosted builds the auth instance solely for
+  // Search Console token ops (genericOAuth with its own creds), so it must not
+  // require social-login config here.
   if (!isHostedAuthMode(env.AUTH_MODE)) {
     return {};
   }
 
-  return {
-    google: getGoogleSocialProviderConfig(),
-  };
+  const google = getGoogleSocialProviderConfig();
+  return google ? { google } : {};
 }
 
 function getGoogleSocialProviderConfig() {
   const googleClientId = env.GOOGLE_CLIENT_ID?.trim();
   const googleClientSecret = env.GOOGLE_CLIENT_SECRET?.trim();
 
-  if (!googleClientId) {
-    throw new Error("GOOGLE_CLIENT_ID is required in hosted mode");
-  }
-
-  if (!googleClientSecret) {
-    throw new Error("GOOGLE_CLIENT_SECRET is required in hosted mode");
+  // Google is optional — return null when unconfigured instead of throwing so
+  // the hosted deployment can run on email/password alone.
+  if (!googleClientId || !googleClientSecret) {
+    return null;
   }
 
   return {
@@ -269,9 +297,10 @@ function hasHostedAuthEmailConfig() {
 
 export function hasHostedAuthConfig() {
   try {
+    // Google is intentionally NOT required here — email/password is a complete
+    // hosted auth method on its own. Only the base URL + secret are mandatory.
     getHostedBaseUrl();
     getHostedSecret();
-    getGoogleSocialProviderConfig();
     return (
       hasHostedTurnstileConfig(env) &&
       (Reflect.get(env, "BYPASS_EMAIL_VERIFICATION") === "true" ||

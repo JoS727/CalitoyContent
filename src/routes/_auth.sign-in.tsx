@@ -26,11 +26,11 @@ export const Route = createFileRoute("/_auth/sign-in")({
 function SignInPage() {
   const search = Route.useSearch();
   const navigate = useNavigate();
-  const { redirectTo, oauthQuery, isHostedMode } = useAuthPageState(
-    search.redirect,
-  );
+  const { redirectTo, oauthQuery, isHostedMode, googleEnabled } =
+    useAuthPageState(search.redirect);
   const authCallbackURL = redirectTo;
-  const [showEmailForm, setShowEmailForm] = useState(false);
+  // When Google isn't configured, go straight to the email/password form.
+  const [showEmailForm, setShowEmailForm] = useState(!googleEnabled);
   const [isStartingGoogle, setIsStartingGoogle] = useState(false);
   const [socialError, setSocialError] = useState<string | null>(null);
 
@@ -135,7 +135,7 @@ function SignInPage() {
               <Link
                 to="/forgot-password"
                 search={getSignInSearch(redirectTo)}
-                className="text-base-content underline underline-offset-2 hover:text-base-content/80 transition-colors"
+                className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
               >
                 Forgot password?
               </Link>
@@ -143,7 +143,7 @@ function SignInPage() {
             <Link
               to="/sign-up"
               search={getSignInSearch(redirectTo)}
-              className="text-base-content underline underline-offset-2 hover:text-base-content/80 transition-colors"
+              className="text-primary underline underline-offset-2 hover:text-primary/80 transition-colors"
             >
               Create account
             </Link>
@@ -239,7 +239,7 @@ function SignInPage() {
                     <p className="text-sm text-error">{errorMessage}</p>
                   ) : null}
                   <button
-                    className="btn btn-soft w-full"
+                    className="btn btn-primary w-full"
                     disabled={!isHostedMode || isSubmitting}
                   >
                     {isSubmitting ? "Signing in..." : "Sign in"}

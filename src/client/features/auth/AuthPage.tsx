@@ -3,7 +3,7 @@ import {
   getCurrentAuthRedirect,
   getOAuthSignedQuery,
 } from "@/lib/auth-redirect";
-import { isHostedClientAuthMode } from "@/lib/auth-mode";
+import { isGoogleAuthEnabled, isHostedClientAuthMode } from "@/lib/auth-mode";
 
 export const authRedirectSearchSchema = z.object({
   redirect: z.string().optional(),
@@ -16,11 +16,13 @@ export function useAuthPageState(redirect: string | undefined) {
       ? getOAuthSignedQuery(window.location.search)
       : null;
   const isHostedMode = isHostedClientAuthMode();
+  const googleEnabled = isGoogleAuthEnabled();
 
   return {
     redirectTo,
     oauthQuery,
     isHostedMode,
+    googleEnabled,
   };
 }
 
@@ -105,6 +107,9 @@ export function AuthPageCard({
           alt="Calitoy Content"
           className="mx-auto size-10 rounded-lg"
         />
+        <p className="text-sm font-semibold tracking-tight text-base-content/80">
+          Calitoy Content
+        </p>
         <div>
           <h1 className="text-xl font-semibold">{title}</h1>
           {helperText ? (

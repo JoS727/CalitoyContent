@@ -69,6 +69,19 @@ export const Route = createRootRoute({
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      // Geist Sans (Calitoy brand font). Loaded via <link> because a CSS
+      // @import of a remote font gets stripped by the Tailwind/LightningCSS
+      // build pipeline.
+      { rel: "preconnect", href: "https://fonts.googleapis.com" },
+      {
+        rel: "preconnect",
+        href: "https://fonts.gstatic.com",
+        crossOrigin: "anonymous",
+      },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap",
+      },
       {
         rel: "apple-touch-icon",
         sizes: "180x180",

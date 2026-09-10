@@ -23,6 +23,13 @@ export function isHostedClientAuthMode() {
   return isHostedAuthMode(import.meta.env.AUTH_MODE);
 }
 
+export function isGoogleAuthEnabled() {
+  // Client build-time flag. Google social login is optional; when it isn't
+  // explicitly enabled we hide the "Continue with Google" affordance so the UI
+  // only offers email/password. Must match the server having Google creds.
+  return import.meta.env.GOOGLE_AUTH_ENABLED === "true";
+}
+
 export function isEmailVerificationBypassed() {
   // Local-dev escape hatch (BYPASS_EMAIL_VERIFICATION=true). The server skips
   // verification and never marks users emailVerified, so the client must treat

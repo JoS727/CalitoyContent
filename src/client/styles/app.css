@@ -1,7 +1,12 @@
 @import "tailwindcss";
 
+/* Geist Sans (Calitoy brand font) is loaded via a <link> in __root.tsx head;
+   a remote CSS @import is stripped by the Tailwind/LightningCSS pipeline. */
+
 @theme {
   --container-8xl: 88rem;
+  --font-sans: "Geist", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 :root {
@@ -19,32 +24,33 @@
   exclude: properties;
 }
 
-/* Light theme */
+/* Calitoy "light" theme — intentionally dark-valued too, so there is never a
+   light flash and the toggle stays visually consistent with the brand. */
 @plugin "daisyui/theme" {
-  name: "openseo";
-  default: true;
+  name: "calitoy";
+  default: false;
   prefersdark: false;
-  color-scheme: light;
-  --color-base-100: oklch(100% 0 0);
-  --color-base-200: oklch(97% 0 0);
-  --color-base-300: oklch(92% 0 0);
-  --color-base-content: oklch(20% 0 0);
-  --color-primary: oklch(50% 0.12 262);
-  --color-primary-content: oklch(100% 0 0);
-  --color-secondary: oklch(55% 0.15 145);
-  --color-secondary-content: oklch(100% 0 0);
-  --color-accent: oklch(50% 0.12 262);
-  --color-accent-content: oklch(100% 0 0);
-  --color-neutral: oklch(25% 0 0);
-  --color-neutral-content: oklch(100% 0 0);
+  color-scheme: dark;
+  --color-base-100: #0a0a0b;
+  --color-base-200: #111113;
+  --color-base-300: #1c1c1f;
+  --color-base-content: #f0f0f0;
+  --color-primary: #7c3aed;
+  --color-primary-content: #ffffff;
+  --color-secondary: #a78bfa;
+  --color-secondary-content: #0a0a0b;
+  --color-accent: #7c3aed;
+  --color-accent-content: #ffffff;
+  --color-neutral: #71717a;
+  --color-neutral-content: #f0f0f0;
   --color-info: oklch(70% 0.15 230);
-  --color-info-content: oklch(100% 0 0);
+  --color-info-content: #ffffff;
   --color-success: oklch(65% 0.18 145);
-  --color-success-content: oklch(100% 0 0);
+  --color-success-content: #ffffff;
   --color-warning: oklch(80% 0.15 80);
-  --color-warning-content: oklch(100% 0 0);
+  --color-warning-content: #0a0a0b;
   --color-error: oklch(65% 0.2 25);
-  --color-error-content: oklch(100% 0 0);
+  --color-error-content: #ffffff;
   --radius-selector: 0.5rem;
   --radius-field: 0.5rem;
   --radius-box: 0.75rem;
@@ -55,31 +61,33 @@
   --noise: 0;
 }
 
-/* Dark theme - auto-activates via prefers-color-scheme */
+/* Calitoy dark theme — the DEFAULT theme, also auto-activates via
+   prefers-color-scheme: dark. */
 @plugin "daisyui/theme" {
-  name: "openseo-dark";
+  name: "calitoy-dark";
+  default: true;
   prefersdark: true;
   color-scheme: dark;
-  --color-base-100: oklch(18% 0 0);
-  --color-base-200: oklch(12% 0 0);
-  --color-base-300: oklch(27% 0 0);
-  --color-base-content: oklch(92% 0 0);
-  --color-primary: oklch(66% 0.12 262);
-  --color-primary-content: oklch(100% 0 0);
-  --color-secondary: oklch(60% 0.15 145);
-  --color-secondary-content: oklch(100% 0 0);
-  --color-accent: oklch(66% 0.12 262);
-  --color-accent-content: oklch(100% 0 0);
-  --color-neutral: oklch(85% 0 0);
-  --color-neutral-content: oklch(20% 0 0);
+  --color-base-100: #0a0a0b;
+  --color-base-200: #111113;
+  --color-base-300: #1c1c1f;
+  --color-base-content: #f0f0f0;
+  --color-primary: #7c3aed;
+  --color-primary-content: #ffffff;
+  --color-secondary: #a78bfa;
+  --color-secondary-content: #0a0a0b;
+  --color-accent: #7c3aed;
+  --color-accent-content: #ffffff;
+  --color-neutral: #71717a;
+  --color-neutral-content: #f0f0f0;
   --color-info: oklch(70% 0.15 230);
-  --color-info-content: oklch(100% 0 0);
+  --color-info-content: #ffffff;
   --color-success: oklch(65% 0.18 145);
-  --color-success-content: oklch(100% 0 0);
+  --color-success-content: #ffffff;
   --color-warning: oklch(80% 0.15 80);
-  --color-warning-content: oklch(100% 0 0);
+  --color-warning-content: #0a0a0b;
   --color-error: oklch(65% 0.2 25);
-  --color-error-content: oklch(100% 0 0);
+  --color-error-content: #ffffff;
   --radius-selector: 0.5rem;
   --radius-field: 0.5rem;
   --radius-box: 0.75rem;
@@ -93,10 +101,32 @@
 html,
 body {
   @apply m-0 bg-base-200;
+  font-family: "Geist", ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
   overflow: hidden;
+}
+
+/* Thin Calitoy-brand scrollbars (matches CalitoyCore). */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #3f3f46 #0a0a0b;
+}
+*::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+*::-webkit-scrollbar-track {
+  background: #0a0a0b;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #3f3f46;
+  border-radius: 9999px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #52525b;
 }
 
 /* Prevent Safari mobile from zooming on input focus (requires 16px minimum) */
@@ -153,7 +183,7 @@ select {
    base-200, which is darker than the base-100 content panel in dark mode,
    so they read as sunken/disabled. Colored variants (primary, error, ...)
    set their own --btn-color and are excluded. */
-html[data-theme="openseo-dark"]
+html[data-theme="calitoy-dark"]
   .btn:not(
     .btn-primary,
     .btn-error,
@@ -168,7 +198,7 @@ html[data-theme="openseo-dark"]
 /* Light mode: the base-200 default button is nearly invisible on the
    base-100 content panel; use a white surface with a visible border,
    matching inputs/selects. */
-html[data-theme="openseo"]
+html[data-theme="calitoy"]
   .btn:not(
     .btn-primary,
     .btn-error,
@@ -251,28 +281,28 @@ html[data-theme="openseo"]
   --tw-ring-color: color-mix(in oklab, #d946ef 30%, transparent);
 }
 
-html[data-theme="openseo-dark"] .tag-chip-slate {
+html[data-theme="calitoy-dark"] .tag-chip-slate {
   color: #cbd5e1;
 }
-html[data-theme="openseo-dark"] .tag-chip-rose {
+html[data-theme="calitoy-dark"] .tag-chip-rose {
   color: #fda4af;
 }
-html[data-theme="openseo-dark"] .tag-chip-amber {
+html[data-theme="calitoy-dark"] .tag-chip-amber {
   color: #fcd34d;
 }
-html[data-theme="openseo-dark"] .tag-chip-lime {
+html[data-theme="calitoy-dark"] .tag-chip-lime {
   color: #d9f99d;
 }
-html[data-theme="openseo-dark"] .tag-chip-emerald {
+html[data-theme="calitoy-dark"] .tag-chip-emerald {
   color: #6ee7b7;
 }
-html[data-theme="openseo-dark"] .tag-chip-sky {
+html[data-theme="calitoy-dark"] .tag-chip-sky {
   color: #7dd3fc;
 }
-html[data-theme="openseo-dark"] .tag-chip-violet {
+html[data-theme="calitoy-dark"] .tag-chip-violet {
   color: #c4b5fd;
 }
-html[data-theme="openseo-dark"] .tag-chip-fuchsia {
+html[data-theme="calitoy-dark"] .tag-chip-fuchsia {
   color: #f5d0fe;
 }
 
@@ -323,29 +353,29 @@ html[data-theme="openseo-dark"] .tag-chip-fuchsia {
   --tw-ring-color: color-mix(in oklab, #b91c1c 32%, transparent);
 }
 
-html[data-theme="openseo-dark"] .score-tier-na {
+html[data-theme="calitoy-dark"] .score-tier-na {
   color: #cbd5e1;
 }
-html[data-theme="openseo-dark"] .score-tier-1 {
+html[data-theme="calitoy-dark"] .score-tier-1 {
   color: #6ee7b7;
 }
-html[data-theme="openseo-dark"] .score-tier-2 {
+html[data-theme="calitoy-dark"] .score-tier-2 {
   color: #bef264;
 }
-html[data-theme="openseo-dark"] .score-tier-3 {
+html[data-theme="calitoy-dark"] .score-tier-3 {
   color: #fde047;
 }
-html[data-theme="openseo-dark"] .score-tier-4 {
+html[data-theme="calitoy-dark"] .score-tier-4 {
   color: #fdba74;
 }
-html[data-theme="openseo-dark"] .score-tier-5 {
+html[data-theme="calitoy-dark"] .score-tier-5 {
   color: #fca5a5;
 }
-html[data-theme="openseo-dark"] .score-tier-6 {
+html[data-theme="calitoy-dark"] .score-tier-6 {
   color: #fda4af;
 }
 
-html[data-theme="openseo-dark"] {
+html[data-theme="calitoy-dark"] {
   --trend-grid-color: oklch(78% 0.01 255 / 0.22);
   --trend-axis-color: oklch(84% 0.01 255 / 0.62);
   --trend-fill-start-opacity: 0.24;
@@ -355,18 +385,18 @@ html[data-theme="openseo-dark"] {
   --trend-tooltip-shadow: oklch(0% 0 0 / 0.35);
 }
 
-html[data-theme="openseo-dark"] .alert-warning {
+html[data-theme="calitoy-dark"] .alert-warning {
   @apply border-warning/60 bg-warning/20;
 }
 
-html[data-theme="openseo-dark"] .alert-info {
+html[data-theme="calitoy-dark"] .alert-info {
   @apply border-info/60 bg-info/20;
 }
 
-html[data-theme="openseo-dark"] .alert-success {
+html[data-theme="calitoy-dark"] .alert-success {
   @apply border-success/60 bg-success/20;
 }
 
-html[data-theme="openseo-dark"] .alert-error {
+html[data-theme="calitoy-dark"] .alert-error {
   @apply border-error/60 bg-error/20;
 }
